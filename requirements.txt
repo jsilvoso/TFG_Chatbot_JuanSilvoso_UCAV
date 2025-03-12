@@ -1,0 +1,15 @@
+pip==24.0
+setuptools==68.0.0
+
+
+Flask==2.2.5
+nltk==3.8.1
+spacy==3.5.0
+transformers==4.36.2
+scikit-learn==1.2.2
+torch==2.0.1
+torchvision==0.15.2
+torchaudio==2.0.2
+gunicorn==20.1.0
+numpy==1.23.5
+thinc==8.1.0

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparación de Chatbots</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .chat-container { display: flex; justify-content: space-around; margin-top: 20px; }
+        .chat-box { width: 30%; border: 1px solid #ccc; padding: 10px; border-radius: 5px; }
+        .chat-box h2 { margin-top: 0; }
+        .messages { height: 300px; overflow-y: auto; border: 1px solid #ddd; padding: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Comparación de Respuestas de Chatbots</h1>
+    <input type="text" id="userInput" placeholder="Escribe un mensaje...">
+    <button onclick="sendMessage()">Enviar</button>
+
+    <div class="chat-container">
+        <div class="chat-box">
+            <h2>Chatbot NLTK</h2>
+            <div class="messages" id="nltkChat"></div>
+        </div>
+        <div class="chat-box">
+            <h2>Chatbot Embeddings</h2>
+            <div class="messages" id="embeddingsChat"></div>
+        </div>
+        <div class="chat-box">
+            <h2>Chatbot Transformers</h2>
+            <div class="messages" id="transformersChat"></div>
+        </div>
+    </div>
+
+    <script>
+        function sendMessage() {
+            let input = document.getElementById("userInput").value;
+            if (!input.trim()) return;
+
+            fetchResponses("nltkChat", "/chat_nltk", input);
+            fetchResponses("embeddingsChat", "/chat_embeddings", input);
+            fetchResponses("transformersChat", "/chat_transformers", input);
+
+            document.getElementById("userInput").value = "";
+        }
+
+        function fetchResponses(chatId, endpoint, message) {
+            fetch(endpoint, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                let chatBox = document.getElementById(chatId);
+                chatBox.innerHTML += `<p><b>Tú:</b> ${message}</p>`;
+                chatBox.innerHTML += `<p><b>Chatbot:</b> ${data.response}</p>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            });
+        }
+    </script>
+</body>
+</html>
