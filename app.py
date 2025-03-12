@@ -20,9 +20,9 @@ os.system("python -m spacy download es_core_news_sm")
 nlp = spacy.load("es_core_news_sm")
 
 from transformers import AutoModelForCausalLM, AutoTokenizer
-
+"""
 app = Flask(__name__)
-
+"""
 # ---- Chatbot NLTK ---- #
 pares = [
     (r"hola|buenas", ["¡Hola! ¿En qué puedo ayudarte?", "¡Hola!"]),
