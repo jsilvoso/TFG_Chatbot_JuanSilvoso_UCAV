@@ -53,12 +53,12 @@ def generate_transformer_response(user_input):
     outputs = model.generate(inputs, max_length=1000, pad_token_id=tokenizer.eos_token_id)
     response = tokenizer.decode(outputs[:, inputs.shape[-1]:][0], skip_special_tokens=True)
     return response if response else "No tengo una respuesta para eso."
-
+"""
 # ---- Rutas Flask ---- #
 @app.route("/")
 def home():
     return render_template("index.html")
-      
+"""      
 @app.route("/chat_nltk", methods=["POST"])
 def chat_nltk_response():
     user_input = request.json.get("message", "")
