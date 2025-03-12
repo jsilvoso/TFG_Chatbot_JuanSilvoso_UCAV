@@ -34,16 +34,17 @@
             <div class="messages" id="transformersChat"></div>
         </div>
     </div>
- <!--
+
     <script>
         function sendMessage() {
             let input = document.getElementById("userInput").value;
             if (!input.trim()) return;
 
             fetchResponses("nltkChat", "/chat_nltk", input);
+ <!--
             fetchResponses("embeddingsChat", "/chat_embeddings", input);
             fetchResponses("transformersChat", "/chat_transformers", input);
-
+-->
             document.getElementById("userInput").value = "";
         }
 

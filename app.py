@@ -20,7 +20,7 @@ nlp = spacy.load("es_core_news_sm")
 from transformers import AutoModelForCausalLM, AutoTokenizer
 """
 app = Flask(__name__)
-"""
+
 # ---- Chatbot NLTK ---- #
 pares = [
     (r"hola|buenas", ["¡Hola! ¿En qué puedo ayudarte?", "¡Hola!"]),
@@ -28,7 +28,7 @@ pares = [
     (r"adiós|chao", ["¡Hasta luego!", "Adiós, que tengas un buen día."])
 ]
 chat_nltk = Chat(pares, reflections)
-
+"""
 # ---- Chatbot con Embeddings (spaCy) ---- #
 nlp = spacy.load("es_core_news_sm")
 def get_best_match(user_input):
@@ -56,13 +56,13 @@ def generate_transformer_response(user_input):
 @app.route("/")
 def home():
     return render_template("index.html")
-"""      
+
 @app.route("/chat_nltk", methods=["POST"])
 def chat_nltk_response():
     user_input = request.json.get("message", "")
     response = chat_nltk.respond(user_input) or "No entendí lo que dijiste."
     return jsonify({"response": response})
-
+"""
 @app.route("/chat_embeddings", methods=["POST"])
 def chat_embeddings_response():
     user_input = request.json.get("message", "")
