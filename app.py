@@ -2,6 +2,9 @@
 #Primera Versión: "Se genera una respuesta si la pregunta coincide con alguna de las establecidas"
 
 from flask import Flask, render_template, request, jsonify
+
+"""
+
 from nltk.chat.util import Chat, reflections
 import spacy
 import os
@@ -55,7 +58,7 @@ def generate_transformer_response(user_input):
 @app.route("/")
 def home():
     return render_template("index.html")
-
+      
 @app.route("/chat_nltk", methods=["POST"])
 def chat_nltk_response():
     user_input = request.json.get("message", "")
@@ -74,6 +77,7 @@ def chat_transformers_response():
     response = generate_transformer_response(user_input)
     return jsonify({"response": response})
 
+"""
 if __name__ == "__main__":
     #port = int(os.environ.get("PORT", 10000))  # Puerto de Render
     app.run(host="0.0.0.0", port=5000)
