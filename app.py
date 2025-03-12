@@ -75,7 +75,7 @@ def chat_transformers_response():
     return jsonify({"response": response})
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))  # Puerto de Render
-    app.run(host="0.0.0.0", port=port)
+    #port = int(os.environ.get("PORT", 10000))  # Puerto de Render
+    app.run(host="0.0.0.0", port=5000)
 
 #Prueba hecha en entorno virual correctamente
