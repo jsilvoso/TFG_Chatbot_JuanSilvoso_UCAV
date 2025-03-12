@@ -2,14 +2,12 @@
 #Primera Versión: "Se genera una respuesta si la pregunta coincide con alguna de las establecidas"
 
 from flask import Flask, render_template, request, jsonify
-
-"""
-
 from nltk.chat.util import Chat, reflections
-import spacy
-import os
-import torch
 
+#import spacy
+#import os
+#import torch
+"""
 #Fuerza la instalación de versiones compatibles de numpy y spacy para solucionar el error que aparecía.
 os.system("pip install --upgrade --force-reinstall numpy==1.23.5 spacy thinc")
 
