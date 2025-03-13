@@ -4,7 +4,7 @@
 from flask import Flask, render_template, request, jsonify
 from nltk.chat.util import Chat, reflections
 
-import spacy
+#import spacy
 import os
 import torch
 
