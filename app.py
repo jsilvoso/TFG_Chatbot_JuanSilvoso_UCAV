@@ -9,7 +9,7 @@ import os
 import torch
 
 #Fuerza la instalación de versiones compatibles de numpy y spacy para solucionar el error que aparecía.
-os.system("pip install --upgrade --force-reinstall numpy==1.23.5 spacy thinc")
+#os.system("pip install --upgrade --force-reinstall numpy==1.23.5 spacy thinc")
 
 # Descargar el modelo si no existe
 os.system("python -m spacy download es_core_news_sm")
