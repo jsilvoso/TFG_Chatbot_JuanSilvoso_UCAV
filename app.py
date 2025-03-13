@@ -4,10 +4,10 @@
 from flask import Flask, render_template, request, jsonify
 from nltk.chat.util import Chat, reflections
 
-#import spacy
-#import os
+import spacy
+import os
 #import torch
-"""
+
 #Fuerza la instalación de versiones compatibles de numpy y spacy para solucionar el error que aparecía.
 os.system("pip install --upgrade --force-reinstall numpy==1.23.5 spacy thinc")
 
@@ -16,7 +16,7 @@ os.system("python -m spacy download es_core_news_sm")
 
 # Cargar el modelo
 nlp = spacy.load("es_core_news_sm")
-
+"""
 from transformers import AutoModelForCausalLM, AutoTokenizer
 """
 app = Flask(__name__)
@@ -28,7 +28,7 @@ pares = [
     (r"adiós|chao", ["¡Hasta luego!", "Adiós, que tengas un buen día."])
 ]
 chat_nltk = Chat(pares, reflections)
-"""
+
 # ---- Chatbot con Embeddings (spaCy) ---- #
 nlp = spacy.load("es_core_news_sm")
 def get_best_match(user_input):
@@ -40,7 +40,7 @@ def get_best_match(user_input):
     user_doc = nlp(user_input)
     best_match = max(responses.keys(), key=lambda x: nlp(x).similarity(user_doc))
     return responses[best_match] if user_doc.similarity(nlp(best_match)) > 0.5 else "No entendí tu pregunta."
-
+"""
 # ---- Chatbot con Transformers ---- #
 model_name = "microsoft/DialoGPT-small"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
@@ -62,13 +62,13 @@ def chat_nltk_response():
     user_input = request.json.get("message", "")
     response = chat_nltk.respond(user_input) or "No entendí lo que dijiste."
     return jsonify({"response": response})
-"""
+
 @app.route("/chat_embeddings", methods=["POST"])
 def chat_embeddings_response():
     user_input = request.json.get("message", "")
     response = get_best_match(user_input)
     return jsonify({"response": response})
-
+"""
 @app.route("/chat_transformers", methods=["POST"])
 def chat_transformers_response():
     user_input = request.json.get("message", "")
