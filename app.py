@@ -15,7 +15,7 @@ import torch
 os.system("python -m spacy download es_core_news_sm")
 
 # Cargar el modelo
-nlp = spacy.load("es_core_news_sm")
+#nlp = spacy.load("es_core_news_sm")
 """
 from transformers import AutoModelForCausalLM, AutoTokenizer
 """
@@ -29,6 +29,7 @@ pares = [
 ]
 chat_nltk = Chat(pares, reflections)
 
+"""
 # ---- Chatbot con Embeddings (spaCy) ---- #
 nlp = spacy.load("es_core_news_sm")
 def get_best_match(user_input):
@@ -51,7 +52,7 @@ def generate_transformer_response(user_input):
     outputs = model.generate(inputs, max_length=1000, pad_token_id=tokenizer.eos_token_id)
     response = tokenizer.decode(outputs[:, inputs.shape[-1]:][0], skip_special_tokens=True)
     return response if response else "No tengo una respuesta para eso."
-"""
+
 # ---- Rutas Flask ---- #
 @app.route("/")
 def home():
