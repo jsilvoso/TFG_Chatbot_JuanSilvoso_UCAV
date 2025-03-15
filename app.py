@@ -16,9 +16,9 @@ import torch
 
 # Cargar el modelo
 #nlp = spacy.load("es_core_news_sm")
-"""
+
 from transformers import AutoModelForCausalLM, AutoTokenizer
-"""
+
 app = Flask(__name__)
 
 # ---- Chatbot NLTK ---- #
