@@ -69,14 +69,13 @@ def chat_embeddings_response():
     user_input = request.json.get("message", "")
     response = get_best_match(user_input)
     return jsonify({"response": response})
-"""
+
 @app.route("/chat_transformers", methods=["POST"])
 def chat_transformers_response():
     user_input = request.json.get("message", "")
     response = generate_transformer_response(user_input)
     return jsonify({"response": response})
 
-"""
 if __name__ == "__main__":
     #port = int(os.environ.get("PORT", 10000))  # Puerto de Render
     app.run(host="0.0.0.0", port=5000)
