@@ -3,7 +3,7 @@
 
 from flask import Flask, render_template, request, jsonify
 from nltk.chat.util import Chat, reflections
-#import spacy #Comprobar fallos
+import spacy #Comprobar fallos
 import os
 #import torch
 
@@ -13,7 +13,7 @@ try:
 except ImportError:
     print("Advertencia: torch no está instalado. Algunas funcionalidades pueden no estar disponibles.")
 
-"""
+
 # Verificar si el modelo está instalado antes de cargarlo
 import spacy.util
 if not spacy.util.is_package("es_core_news_sm"):
@@ -23,7 +23,7 @@ if not spacy.util.is_package("es_core_news_sm"):
 
 # Carga el modelo
 nlp = spacy.load("es_core_news_sm")
-"""
+
 
 
 from transformers import AutoModelForCausalLM, AutoTokenizer
