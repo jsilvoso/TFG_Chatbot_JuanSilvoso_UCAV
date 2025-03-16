@@ -8,8 +8,23 @@ from nltk.chat.util import Chat, reflections
 import os
 import torch
 
+import spacy.util
+
+# Verificar si el modelo está instalado antes de cargarlo
+if not spacy.util.is_package("es_core_news_sm"):
+    print("El modelo de spaCy no está instalado. Instálalo manualmente con:")
+    print("    python -m spacy download es_core_news_sm")
+    exit(1)  # Salir del programa si el modelo no está instalado
+
 # Cargar el modelo
-#nlp = spacy.load("es_core_news_sm")
+nlp = spacy.load("es_core_news_sm")
+
+#Importa torch si es necesario
+try:
+    import torch
+except ImportError:
+    print("Advertencia: torch no está instalado. Algunas funcionalidades pueden no estar disponibles.")
+
 
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -71,7 +86,8 @@ def chat_transformers_response():
     return jsonify({"response": response})
 
 if __name__ == "__main__":
-    #port = int(os.environ.get("PORT", 10000))  # Puerto de Render
-    app.run(host="0.0.0.0", port=5000)
+    port = int(os.environ.get("PORT", 5000))  # Usa el puerto de Render o 5000 por defecto
+    app.run(host="0.0.0.0", port=port)
+
 
 #Prueba hecha en entorno virual correctamente
