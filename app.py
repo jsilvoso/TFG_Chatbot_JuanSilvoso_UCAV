@@ -3,7 +3,7 @@
 
 from flask import Flask, render_template, request, jsonify
 from nltk.chat.util import Chat, reflections
-import spacy #Comprobar fallos
+#import spacy #Comprobar fallos
 import os
 #import torch
 
@@ -13,12 +13,20 @@ try:
 except ImportError:
     print("Advertencia: torch no está instalado. Algunas funcionalidades pueden no estar disponibles.")
 
+try:
+    import spacy
+except ImportError:
+    print("spaCy no está instalado. Instalándolo ahora...")
+    os.system("pip install --no-cache-dir spacy==3.5.0")
+    import spacy
+
 
 # Verificar si el modelo está instalado antes de cargarlo
 import spacy.util
 if not spacy.util.is_package("es_core_news_sm"):
     print("El modelo de spaCy no está instalado. Instálalo manualmente con:")
     print("    python -m spacy download es_core_news_sm")
+    os.system("python -m spacy download es_core_news_sm") #Para instalarlo
     exit(1)  # Salir del programa si el modelo no está instalado
 
 # Carga el modelo
