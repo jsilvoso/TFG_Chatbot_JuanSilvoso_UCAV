@@ -4,18 +4,12 @@
 from flask import Flask, render_template, request, jsonify
 from nltk.chat.util import Chat, reflections
 
-import spacy
+#import spacy
 import os
 import torch
 
-#Fuerza la instalación de versiones compatibles de numpy y spacy para solucionar el error que aparecía.
-#os.system("pip install --upgrade --force-reinstall numpy==1.23.5 spacy thinc")
-
-# Descargar el modelo si no existe
-os.system("python -m spacy download es_core_news_sm")
-
 # Cargar el modelo
-nlp = spacy.load("es_core_news_sm")
+#nlp = spacy.load("es_core_news_sm")
 
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
