@@ -53,7 +53,7 @@ def get_best_match(user_input):
 """
 # ---- Chatbot con Transformers ---- #
 model_name = "microsoft/DialoGPT-small"
-tokenizer = AutoTokenizer.from_pretrained(model_name)
+tokenizer = AutoTokenizer.from_pretrained(model_name, padding_side="left")
 model = AutoModelForCausalLM.from_pretrained(model_name)
 
 def generate_transformer_response(user_input):
