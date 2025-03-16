@@ -3,27 +3,26 @@
 
 from flask import Flask, render_template, request, jsonify
 from nltk.chat.util import Chat, reflections
-
-#import spacy
+import spacy
 import os
-import torch
-
-import spacy.util
-
-# Verificar si el modelo está instalado antes de cargarlo
-if not spacy.util.is_package("es_core_news_sm"):
-    print("El modelo de spaCy no está instalado. Instálalo manualmente con:")
-    print("    python -m spacy download es_core_news_sm")
-    exit(1)  # Salir del programa si el modelo no está instalado
-
-# Cargar el modelo
-nlp = spacy.load("es_core_news_sm")
+#import torch
 
 #Importa torch si es necesario
 try:
     import torch
 except ImportError:
     print("Advertencia: torch no está instalado. Algunas funcionalidades pueden no estar disponibles.")
+
+# Verificar si el modelo está instalado antes de cargarlo
+import spacy.util
+if not spacy.util.is_package("es_core_news_sm"):
+    print("El modelo de spaCy no está instalado. Instálalo manualmente con:")
+    print("    python -m spacy download es_core_news_sm")
+    exit(1)  # Salir del programa si el modelo no está instalado
+
+# Carga el modelo
+nlp = spacy.load("es_core_news_sm")
+
 
 
 from transformers import AutoModelForCausalLM, AutoTokenizer
