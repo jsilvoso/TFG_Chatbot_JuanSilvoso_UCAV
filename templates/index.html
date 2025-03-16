@@ -15,8 +15,6 @@
 <body>
     <h1>Comparación de Respuestas de Chatbots</h1>
 
-
-
     <input type="text" id="userInput" placeholder="Escribe un mensaje...">
     <button onclick="sendMessage()">Enviar</button>
 
@@ -41,9 +39,7 @@
             if (!input.trim()) return;
 
             fetchResponses("nltkChat", "/chat_nltk", input);
- <!--
             fetchResponses("embeddingsChat", "/chat_embeddings", input);
- -->
             fetchResponses("transformersChat", "/chat_transformers", input);
 
             document.getElementById("userInput").value = "";
@@ -68,7 +64,7 @@
     <h2> Esta página es para ver las
         diferentes respuestas de un chatbot depeniendo del tipo de
         metodo usado para generar las respuestas. </h2>
-    <h2>Como pone en sus enunciados, el 1ª sería mediante NLTK, el 2ºEmbeddings y el 3ºcon Transformers.</h2>
+    <h2>Como pone en sus enunciados, el 1ª sería mediante NLTK, el 2ºEmbeddings y el 3º con Transformers.(Desarrollado por Juan S.)</h2>
 
 </body>
 </html>
