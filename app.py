@@ -7,13 +7,14 @@ from nltk.chat.util import Chat, reflections
 import os
 #import torch
 
+"""
 #Importa torch si es necesario
 try:
     import torch
 except ImportError:
     print("Advertencia: torch no está instalado. Algunas funcionalidades pueden no estar disponibles.")
 
-"""
+
 try:
     import spacy
 except ImportError:
@@ -47,6 +48,7 @@ pares = [
 ]
 chat_nltk = Chat(pares, reflections)
 
+"""
 # ---- Chatbot con Embeddings (spaCy) ---- #
 nlp = spacy.load("es_core_news_sm")
 def get_best_match(user_input):
@@ -58,7 +60,7 @@ def get_best_match(user_input):
     user_doc = nlp(user_input)
     best_match = max(responses.keys(), key=lambda x: nlp(x).similarity(user_doc))
     return responses[best_match] if user_doc.similarity(nlp(best_match)) > 0.5 else "No entendí tu pregunta."
-
+"""
 # ---- Chatbot con Transformers ---- #
 model_name = "microsoft/DialoGPT-small"
 tokenizer = AutoTokenizer.from_pretrained(model_name, padding_side="left")
