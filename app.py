@@ -3,7 +3,7 @@
 
 from flask import Flask, render_template, request, jsonify
 from nltk.chat.util import Chat, reflections
-#import spacy #Comprobar fallos
+import spacy #Comprobar fallos
 import os
 #import torch
 import openai
@@ -35,7 +35,7 @@ try:
 except ImportError:
     print("Advertencia: torch no está instalado. Algunas funcionalidades pueden no estar disponibles.")
 
-
+"""
 try:
     import spacy
 except ImportError:
@@ -43,7 +43,6 @@ except ImportError:
     os.system("pip install --no-cache-dir spacy==3.5.0")
     import spacy
 
-"""
 # Verificar si el modelo está instalado antes de cargarlo
 import spacy.util
 if not spacy.util.is_package("es_core_news_sm"):
