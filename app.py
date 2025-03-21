@@ -17,8 +17,9 @@ load_dotenv()  # Cargar variables desde el archivo .env
 api_key = os.getenv("OPENAI_API_KEY")
 
 # Crear cliente OpenAI
-client = openai.OpenAI(api_key=api_key)
+#client = openai.OpenAI(api_key=api_key)
 
+"""
 # Comprobación de la clave API
 if not api_key:
     print("⚠️ ERROR: No se encontró la clave API de OpenAI en las variables de entorno.")
@@ -26,7 +27,7 @@ if not api_key:
 
 openai.api_key = api_key
 print(f"🔹 Clave API de OpenAI detectada: {openai.api_key[:10]}********")
-
+"""
 
 
 #Importa torch si es necesario
