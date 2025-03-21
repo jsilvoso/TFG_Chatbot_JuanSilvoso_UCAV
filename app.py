@@ -35,7 +35,7 @@ try:
 except ImportError:
     print("Advertencia: torch no está instalado. Algunas funcionalidades pueden no estar disponibles.")
 
-"""
+
 try:
     import spacy
 except ImportError:
@@ -55,7 +55,7 @@ if not spacy.util.is_package("es_core_news_sm"):
 # Carga el modelo
 nlp = spacy.load("es_core_news_sm")
 
-"""
+
 
 
 
