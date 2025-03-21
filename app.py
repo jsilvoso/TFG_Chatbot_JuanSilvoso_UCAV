@@ -10,7 +10,6 @@ import openai
 from dotenv import load_dotenv
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-
 load_dotenv()  # Cargar variables desde el archivo .env
 
 # Obtener clave API de OpenAI
@@ -19,14 +18,23 @@ api_key = os.getenv("OPENAI_API_KEY")
 # Crear cliente OpenAI
 #client = openai.OpenAI(api_key=api_key)
 
-"""
 # Comprobación de la clave API
 if not api_key:
     print("⚠️ ERROR: No se encontró la clave API de OpenAI en las variables de entorno.")
     exit(1)  # Sale del programa si la clave no está definida
 
-openai.api_key = api_key
-print(f"🔹 Clave API de OpenAI detectada: {openai.api_key[:10]}********")
+#openai.api_key = api_key
+#print(f"🔹 Clave API de OpenAI detectada: {openai.api_key[:10]}********")
+
+"""
+completion = client.chat.completions.create( #Probando la conexión a OpenAI
+    model="gpt-4o",
+    messages=[{
+        "role": "user",
+        "content": "Escribe una frase de un rinoceronte en una ferretería."
+    }]
+)
+print(completion.choices[0].message.content)
 """
 
 #Importa torch si es necesario
@@ -35,14 +43,13 @@ try:
 except ImportError:
     print("Advertencia: torch no está instalado. Algunas funcionalidades pueden no estar disponibles.")
 
-"""
 try:
     import spacy
 except ImportError:
     print("spaCy no está instalado. Instalándolo ahora...")
     os.system("pip install --no-cache-dir spacy==3.5.0")
     import spacy
-"""
+
 # Verificar si el modelo está instalado antes de cargarlo
 import spacy.util
 if not spacy.util.is_package("es_core_news_sm"):
@@ -53,10 +60,6 @@ if not spacy.util.is_package("es_core_news_sm"):
 
 # Carga el modelo
 nlp = spacy.load("es_core_news_sm")
-
-
-
-
 
 app = Flask(__name__)
 
@@ -91,29 +94,6 @@ def generate_transformer_response(user_input):
     response = tokenizer.decode(outputs[:, inputs.shape[-1]:][0], skip_special_tokens=True)
     return response if response else "No tengo una respuesta para eso."
 
-def generate_openai_response(user_input):
-    try:
-        response = client.chat.completions.create(
-            model="gpt-4", #Comprobar el modelo
-            messages=[
-                {"role": "system", "content": "Eres un asistente útil."},
-                {"role": "user", "content": user_input}
-            ],
-            max_tokens=100
-        )
-        return response.choices[0].message.content
-        #return response.choices[0].message['content'].strip()
-        response = openai.completions.create(
-            model="gpt-4",  # Usa el modelo adecuado para tu cuenta
-            prompt=f"Eres un asistente útil. Responde a la siguiente pregunta: {user_input}",
-            max_tokens=100,
-            temperature=0.7  # Puedes ajustar la aleatoriedad de la respuesta
-        )
-        return response['choices'][0]['text'].strip()
-        #return response['choices'][0]['message']['content'].strip()
-    except openai.OpenAIError as e:
-        return f"❌ ERROR: {str(e)}"
-
 # ---- Rutas Flask ---- #
 @app.route("/")
 def home():
@@ -137,7 +117,28 @@ def chat_transformers_response():
     response = generate_transformer_response(user_input)
     return jsonify({"response": response})
 
-
+def generate_openai_response(user_input):
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4", #Comprobar el modelo
+            messages=[
+                {"role": "system", "content": "Eres un asistente útil."},
+                {"role": "user", "content": user_input}
+            ],
+            max_tokens=100
+        )
+        return response.choices[0].message.content
+        #return response.choices[0].message['content'].strip()
+        response = openai.completions.create(
+            model="gpt-4",  # Usa el modelo adecuado para tu cuenta
+            prompt=f"Eres un asistente útil. Responde a la siguiente pregunta: {user_input}",
+            max_tokens=100,
+            temperature=0.7  # Puedes ajustar la aleatoriedad de la respuesta
+        )
+        return response['choices'][0]['text'].strip()
+        #return response['choices'][0]['message']['content'].strip()
+    except openai.OpenAIError as e:
+        return f"❌ ERROR: {str(e)}"
 
 # Nueva ruta Flask para el chatbot con OpenAI
 @app.route("/chat_openai", methods=["POST"])
@@ -145,12 +146,14 @@ def chat_openai_response():
     user_input = request.json.get("message", "")
     if not user_input:
         return jsonify({"response": "⚠️ ERROR: No se recibió un mensaje válido."})
+
     try:
         response = generate_openai_response(user_input)
         return jsonify({"response": response})
+
     except Exception as e:
         return jsonify({"response": f"❌ ERROR en servidor: {str(e)}"})
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))  # Usa el puerto de Render o 5000 por defecto
+    port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
