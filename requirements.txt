@@ -6,7 +6,7 @@ nltk==3.8.1
 spacy==3.5.0
 werkzeug==2.2.2
 itsdangerous==2.0
-pydantic==1.9.2  #Compatible con spaCy 3.5.0 y thinc 8.1.0
+pydantic==1.10.12  #Compatible con spaCy 3.5.0 y thinc 8.1.0
 transformers==4.36.1
 scikit-learn==1.2.2
 torch==2.0.1
