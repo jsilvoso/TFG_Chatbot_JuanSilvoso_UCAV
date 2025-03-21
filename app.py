@@ -91,6 +91,29 @@ def generate_transformer_response(user_input):
     response = tokenizer.decode(outputs[:, inputs.shape[-1]:][0], skip_special_tokens=True)
     return response if response else "No tengo una respuesta para eso."
 
+def generate_openai_response(user_input):
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4", #Comprobar el modelo
+            messages=[
+                {"role": "system", "content": "Eres un asistente útil."},
+                {"role": "user", "content": user_input}
+            ],
+            max_tokens=100
+        )
+        return response.choices[0].message.content
+        #return response.choices[0].message['content'].strip()
+        response = openai.completions.create(
+            model="gpt-4",  # Usa el modelo adecuado para tu cuenta
+            prompt=f"Eres un asistente útil. Responde a la siguiente pregunta: {user_input}",
+            max_tokens=100,
+            temperature=0.7  # Puedes ajustar la aleatoriedad de la respuesta
+        )
+        return response['choices'][0]['text'].strip()
+        #return response['choices'][0]['message']['content'].strip()
+    except openai.OpenAIError as e:
+        return f"❌ ERROR: {str(e)}"
+
 # ---- Rutas Flask ---- #
 @app.route("/")
 def home():
