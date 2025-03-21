@@ -42,7 +42,7 @@ except ImportError:
     print("spaCy no está instalado. Instalándolo ahora...")
     os.system("pip install --no-cache-dir spacy==3.5.0")
     import spacy
-
+"""
 # Verificar si el modelo está instalado antes de cargarlo
 import spacy.util
 if not spacy.util.is_package("es_core_news_sm"):
@@ -53,7 +53,7 @@ if not spacy.util.is_package("es_core_news_sm"):
 
 # Carga el modelo
 nlp = spacy.load("es_core_news_sm")
-"""
+
 
 
 
