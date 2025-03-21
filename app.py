@@ -16,7 +16,7 @@ load_dotenv()  # Cargar variables desde el archivo .env
 api_key = os.getenv("OPENAI_API_KEY")
 
 # Crear cliente OpenAI
-#client = openai.OpenAI(api_key=api_key)
+client = openai.OpenAI(api_key=api_key)
 
 # Comprobación de la clave API
 if not api_key:
