@@ -19,6 +19,7 @@ api_key = os.getenv("OPENAI_API_KEY")
 # Crear cliente OpenAI
 #client = openai.OpenAI(api_key=api_key)
 
+"""
 # Comprobación de la clave API
 if not api_key:
     print("⚠️ ERROR: No se encontró la clave API de OpenAI en las variables de entorno.")
@@ -26,6 +27,7 @@ if not api_key:
 
 openai.api_key = api_key
 print(f"🔹 Clave API de OpenAI detectada: {openai.api_key[:10]}********")
+"""
 
 #Importa torch si es necesario
 try:
@@ -113,18 +115,7 @@ def chat_transformers_response():
     response = generate_transformer_response(user_input)
     return jsonify({"response": response})
 
-def generate_openai_response(user_input):
-    try:
-        response = openai.completions.create(
-            model="gpt-4",  # Usa el modelo adecuado para tu cuenta
-            prompt=f"Eres un asistente útil. Responde a la siguiente pregunta: {user_input}",
-            max_tokens=100,
-            temperature=0.7  # Puedes ajustar la aleatoriedad de la respuesta
-        )
-        return response['choices'][0]['text'].strip()
-        #return response['choices'][0]['message']['content'].strip()
-    except openai.OpenAIError as e:
-        return f"❌ ERROR: {str(e)}"
+
 
 # Nueva ruta Flask para el chatbot con OpenAI
 @app.route("/chat_openai", methods=["POST"])
@@ -132,11 +123,9 @@ def chat_openai_response():
     user_input = request.json.get("message", "")
     if not user_input:
         return jsonify({"response": "⚠️ ERROR: No se recibió un mensaje válido."})
-
     try:
         response = generate_openai_response(user_input)
         return jsonify({"response": response})
-
     except Exception as e:
         return jsonify({"response": f"❌ ERROR en servidor: {str(e)}"})
 
