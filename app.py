@@ -145,6 +145,3 @@ def chat_openai_response():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))  # Usa el puerto de Render o 5000 por defecto
     app.run(host="0.0.0.0", port=port)
-
-
-#Prueba hecha en entorno virual correctamente
