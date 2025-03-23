@@ -1,5 +1,4 @@
 #Programa principal
-#Primera Versión: "Se genera una respuesta si la pregunta coincide con alguna de las establecidas"
 
 from flask import Flask, render_template, request, jsonify
 from nltk.chat.util import Chat, reflections
@@ -10,28 +9,28 @@ import openai
 from dotenv import load_dotenv
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-load_dotenv()  # Cargar variables desde el archivo .env
+load_dotenv()  # Carga las variables desde el archivo .env
 
-# Obtener clave API de OpenAI
+# Obtiene la clave API de OpenAI
 api_key = os.getenv("OPENAI_API_KEY")
 
 # Crear cliente OpenAI
 client = openai.OpenAI(api_key=api_key)
 
-# Comprobación de la clave API
+# Comprobación de la clave API: Hacemos una comprobación de si el programa consigue la clave para la aplicación de OpenAI
 if not api_key:
-    print("⚠️ ERROR: No se encontró la clave API de OpenAI en las variables de entorno.")
+    print("ERROR: No se encontró la clave API de OpenAI en las variables de entorno.")
     exit(1)  # Sale del programa si la clave no está definida
 
 #openai.api_key = api_key
-#print(f"🔹 Clave API de OpenAI detectada: {openai.api_key[:10]}********")
+#print(f" Clave API de OpenAI detectada: {openai.api_key[:10]}********") #Imprime los primeros caraceteres de la API para ver si es correcta
 
 """
 completion = client.chat.completions.create( #Probando la conexión a OpenAI
     model="gpt-4o",
     messages=[{
         "role": "user",
-        "content": "Escribe una frase de un rinoceronte en una ferretería."
+        "content": "Escribe una frase de un rinoceronte en una ferretería." # Ejemplo para ver si funciona la API
     }]
 )
 print(completion.choices[0].message.content)
@@ -50,7 +49,7 @@ except ImportError:
     os.system("pip install --no-cache-dir spacy==3.5.0")
     import spacy
 
-# Verificar si el modelo está instalado antes de cargarlo
+# Verifica si el modelo está instalado antes de cargarlo
 import spacy.util
 if not spacy.util.is_package("es_core_news_sm"):
     print("El modelo de spaCy no está instalado. Instálalo manualmente con:")
@@ -137,22 +136,22 @@ def generate_openai_response(user_input):
         )
         return response['choices'][0]['text'].strip()
         #return response['choices'][0]['message']['content'].strip()
-    except openai.OpenAIError as e:
-        return f"❌ ERROR: {str(e)}"
+    except openai.OpenAIError as e: #Si la aplicación de OpenAI no da respuesta nos muestra el error
+        return f" ERROR: {str(e)}"
 
 # Nueva ruta Flask para el chatbot con OpenAI
 @app.route("/chat_openai", methods=["POST"])
 def chat_openai_response():
     user_input = request.json.get("message", "")
     if not user_input:
-        return jsonify({"response": "⚠️ ERROR: No se recibió un mensaje válido."})
+        return jsonify({"response": "ERROR: No se recibió un mensaje válido."})
 
     try:
         response = generate_openai_response(user_input)
         return jsonify({"response": response})
 
     except Exception as e:
-        return jsonify({"response": f"❌ ERROR en servidor: {str(e)}"})
+        return jsonify({"response": f" ERROR en servidor: {str(e)}"})
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
