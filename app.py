@@ -8,6 +8,8 @@ import os
 import openai
 from dotenv import load_dotenv
 from transformers import AutoModelForCausalLM, AutoTokenizer
+import time
+import psutil
 
 load_dotenv()  # Carga las variables desde el archivo .env
 
@@ -62,6 +64,8 @@ nlp = spacy.load("es_core_news_sm")
 
 app = Flask(__name__)
 
+process = psutil.Process(os.getpid())
+
 # ---- Chatbot NLTK ---- #
 pares = [
     (r"hola|buenas", ["¡Hola! ¿En qué puedo ayudarte?", "¡Hola!"]),
@@ -100,20 +104,51 @@ def home():
 
 @app.route("/chat_nltk", methods=["POST"])
 def chat_nltk_response():
+    start_time = time.time()  # Inicia la medición de latencia
+
     user_input = request.json.get("message", "")
     response = chat_nltk.respond(user_input) or "No entendí lo que dijiste."
+    end_time = time.time()
+    latency = end_time - start_time
+
+    cpu_usage = process.cpu_percent(interval=0.1)
+    memory_usage_mb = process.memory_info().rss / 1024 / 1024  # en MB
+
+    print(f"📊 [NLTK] Latencia: {latency:.4f} s | CPU: {cpu_usage:.2f}% | Memoria: {memory_usage_mb:.2f} MB")
+
     return jsonify({"response": response})
 
 @app.route("/chat_embeddings", methods=["POST"])
 def chat_embeddings_response():
+    start_time = time.time() # Inicia la medición de latencia
+
     user_input = request.json.get("message", "")
     response = get_best_match(user_input)
+
+    end_time = time.time()
+    latency = end_time - start_time
+    cpu_usage = process.cpu_percent(interval=0.1)
+    memory_usage_mb = process.memory_info().rss / 1024 / 1024
+
+    print(f"📊 [Embeddings] Latencia: {latency:.4f} s | CPU: {cpu_usage:.2f}% | Memoria: {memory_usage_mb:.2f} MB")
+
     return jsonify({"response": response})
 
 @app.route("/chat_transformers", methods=["POST"])
 def chat_transformers_response():
+
+    start_time = time.time() #Inicia la medición de latencia
+
     user_input = request.json.get("message", "")
     response = generate_transformer_response(user_input)
+
+    end_time = time.time()
+    latency = end_time - start_time
+    cpu_usage = process.cpu_percent(interval=0.1)
+    memory_usage_mb = process.memory_info().rss / 1024 / 1024
+
+    print(f"📊 [Transformers] Latencia: {latency:.4f} s | CPU: {cpu_usage:.2f}% | Memoria: {memory_usage_mb:.2f} MB")
+
     return jsonify({"response": response})
 
 def generate_openai_response(user_input):
@@ -147,7 +182,17 @@ def chat_openai_response():
         return jsonify({"response": "ERROR: No se recibió un mensaje válido."})
 
     try:
+        start_time = time.time()  #Inicia la medición de latencia
         response = generate_openai_response(user_input)
+
+        end_time = time.time()
+
+        latency = end_time - start_time
+        cpu_usage = process.cpu_percent(interval=0.1)
+        memory_usage_mb = process.memory_info().rss / 1024 / 1024
+
+        print(f"📊 [OpenAI] Latencia: {latency:.4f} s | CPU: {cpu_usage:.2f}% | Memoria: {memory_usage_mb:.2f} MB")
+
         return jsonify({"response": response})
 
     except Exception as e:
