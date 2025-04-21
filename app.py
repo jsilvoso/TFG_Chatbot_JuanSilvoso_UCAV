@@ -235,7 +235,12 @@ def chat_openai_response():
 #Ruta para las métricas
 @app.route("/api/metricas")
 def api_metricas():
-    return jsonify(list(metricas)[-10:])  # Devuelve las 10 últimas métricas
+    ultimas = {}
+    # Recorremos al revés para tomar la última métrica de cada modelo
+    for metrica in reversed(metricas):
+        if metrica["modelo"] not in ultimas:
+            ultimas[metrica["modelo"]] = metrica
+    return jsonify(list(ultimas.values()))
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))

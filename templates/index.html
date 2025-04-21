@@ -66,6 +66,7 @@
                 chatBox.innerHTML += `<p><b>Tú:</b> ${message}</p>`;
                 chatBox.innerHTML += `<p><b>Chatbot:</b> ${data.response}</p>`;
                 chatBox.scrollTop = chatBox.scrollHeight;
+                actualizarMetricas();  <!-- Llama manualmente a actualizar métricas después de recibir una respuesta  -->
             });
         }
     </script>
@@ -96,29 +97,31 @@
 
 <script>
 function actualizarMetricas() {
-    fetch("/api/metricas")
-        .then(response => response.json())
-        .then(data => {
-            const tbody = document.getElementById("metricas-body");
-            tbody.innerHTML = "";
+            fetch("/api/metricas")
+                .then(response => response.json())
+                .then(data => {
+                    const ordenModelos = ["NLTK", "Embeddings", "Transformers", "OpenAI"];
+                    data.sort((a, b) => ordenModelos.indexOf(a.modelo) - ordenModelos.indexOf(b.modelo));
 
-            data.reverse().forEach(m => {
-                const row = document.createElement("tr");
+                    const tbody = document.getElementById("metricas-body");
+                    tbody.innerHTML = "";
 
-                row.innerHTML = `
-                    <td>${m.modelo}</td>
-                    <td>${m.latencia.toFixed(4)}</td>
-                    <td>${m.cpu.toFixed(2)}</td>
-                    <td>${m.memoria.toFixed(2)}</td>
-                    <td>${new Date(m.timestamp * 1000).toLocaleTimeString()}</td>
-                `;
+                    data.forEach(m => {
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td>${m.modelo}</td>
+                            <td>${m.latencia.toFixed(4)}</td>
+                            <td>${m.cpu.toFixed(2)}</td>
+                            <td>${m.memoria.toFixed(2)}</td>
+                            <td>${new Date(m.timestamp * 1000).toLocaleTimeString()}</td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                });
+        }
 
-                tbody.appendChild(row);
-            });
-        });
-}
 
-setInterval(actualizarMetricas, 2000); // Actualiza las metricas cada 2 segundos
+#setInterval(actualizarMetricas, 2000); // Actualiza las metricas cada 2 segundos
 </script>
 
 </body>
