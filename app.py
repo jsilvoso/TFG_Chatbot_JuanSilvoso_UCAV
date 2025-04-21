@@ -198,6 +198,11 @@ def chat_openai_response():
     except Exception as e:
         return jsonify({"response": f" ERROR en servidor: {str(e)}"})
 
+#Ruta para las métricas
+@app.route("/api/metricas")
+def api_metricas():
+    return jsonify(list(metricas)[-10:])  # Devuelve las 10 últimas métricas
+
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)

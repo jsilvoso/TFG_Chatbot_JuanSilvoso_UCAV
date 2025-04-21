@@ -75,5 +75,51 @@
         metodo usado para generar las respuestas. </h2>
     <h2>Como pone en sus enunciados, el 1ª sería mediante NLTK, el 2º Embeddings y el 3º con OpenAI.(Desarrollado por Juan S.)</h2>
 
+<hr>
+<h3>Métricas en tiempo real</h3>
+<div id="metricas-container">
+    <table border="1" style="width:100%; text-align:center;">
+        <thead>
+            <tr>
+                <th>Modelo</th>
+                <th>Latencia (s)</th>
+                <th>CPU (%)</th>
+                <th>Memoria (MB)</th>
+                <th>Hora</th>
+            </tr>
+        </thead>
+        <tbody id="metricas-body">
+            <!-- Aquí se imprimen las métricas -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+function actualizarMetricas() {
+    fetch("/api/metricas")
+        .then(response => response.json())
+        .then(data => {
+            const tbody = document.getElementById("metricas-body");
+            tbody.innerHTML = "";
+
+            data.reverse().forEach(m => {
+                const row = document.createElement("tr");
+
+                row.innerHTML = `
+                    <td>${m.modelo}</td>
+                    <td>${m.latencia.toFixed(4)}</td>
+                    <td>${m.cpu.toFixed(2)}</td>
+                    <td>${m.memoria.toFixed(2)}</td>
+                    <td>${new Date(m.timestamp * 1000).toLocaleTimeString()}</td>
+                `;
+
+                tbody.appendChild(row);
+            });
+        });
+}
+
+setInterval(actualizarMetricas, 2000); // Actualiza las metricas cada 2 segundos
+</script>
+
 </body>
 </html>
