@@ -66,7 +66,7 @@
                 chatBox.innerHTML += `<p><b>Tú:</b> ${message}</p>`;
                 chatBox.innerHTML += `<p><b>Chatbot:</b> ${data.response}</p>`;
                 chatBox.scrollTop = chatBox.scrollHeight;
-                actualizarMetricas();  <!-- Llama manualmente a actualizar métricas después de recibir una respuesta  -->
+                actualizarMetricas(); // Llama manualmente a actualizar métricas después de recibir una respuesta
             });
         }
     </script>
@@ -121,8 +121,8 @@ function actualizarMetricas() {
         }
 
 
-#setInterval(actualizarMetricas, 2000); // Actualiza las metricas cada 2 segundos
-</script>
+    //setInterval(actualizarMetricas, 2000); // Actualiza las metricas cada 2 segundos
+    </script>
 
 </body>
 </html>
