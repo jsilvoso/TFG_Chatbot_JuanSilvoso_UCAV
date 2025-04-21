@@ -235,12 +235,29 @@ def chat_openai_response():
 #Ruta para las métricas
 @app.route("/api/metricas")
 def api_metricas():
-    ultimas = {}
-    # Recorremos al revés para tomar la última métrica de cada modelo
-    for metrica in reversed(metricas):
-        if metrica["modelo"] not in ultimas:
-            ultimas[metrica["modelo"]] = metrica
-    return jsonify(list(ultimas.values()))
+    modelos = ["NLTK", "Embeddings", "OpenAI"]
+    ultimas = {modelo: None for modelo in modelos}
+
+    for metrica in reversed(metricas):  # Últimas primero
+        modelo = metrica["modelo"]
+        if modelo in ultimas and ultimas[modelo] is None:
+            ultimas[modelo] = metrica
+
+    # Rellenar faltantes con datos vacíos
+    resultado = []
+    for modelo in modelos:
+        if ultimas[modelo]:
+            resultado.append(ultimas[modelo])
+        else:
+            resultado.append({
+                "modelo": modelo,
+                "latencia": None,
+                "cpu": None,
+                "memoria": None,
+                "timestamp": time.time()
+            })
+
+    return jsonify(resultado)
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))

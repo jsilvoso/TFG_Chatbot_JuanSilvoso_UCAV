@@ -110,9 +110,9 @@ function actualizarMetricas() {
                         const row = document.createElement("tr");
                         row.innerHTML = `
                             <td>${m.modelo}</td>
-                            <td>${m.latencia.toFixed(4)}</td>
-                            <td>${m.cpu.toFixed(2)}</td>
-                            <td>${m.memoria.toFixed(2)}</td>
+                            <td>${m.latencia !== null ? m.latencia.toFixed(4) : "-"}</td>
+                            <td>${m.cpu !== null ? m.cpu.toFixed(2) : "-"}</td>
+                            <td>${m.memoria !== null ? m.memoria.toFixed(2) : "-"}</td>
                             <td>${new Date(m.timestamp * 1000).toLocaleTimeString()}</td>
                         `;
                         tbody.appendChild(row);
