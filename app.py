@@ -64,7 +64,10 @@ nlp = spacy.load("es_core_news_sm")
 
 app = Flask(__name__)
 
-process = psutil.Process(os.getpid())
+process = psutil.Process(os.getpid()) #Para las métricas
+
+from collections import deque
+metricas = deque(maxlen=100)  # Guarda las últimas 100 métricas
 
 # ---- Chatbot NLTK ---- #
 pares = [
@@ -114,7 +117,15 @@ def chat_nltk_response():
     cpu_usage = process.cpu_percent(interval=0.1)
     memory_usage_mb = process.memory_info().rss / 1024 / 1024  # en MB
 
-    print(f"📊 [NLTK] Latencia: {latency:.4f} s | CPU: {cpu_usage:.2f}% | Memoria: {memory_usage_mb:.2f} MB")
+    # Guarda la métrica
+    metricas.append({
+        "modelo": "NLTK",
+        "latencia": latency,
+        "cpu": cpu_usage,
+        "memoria": memory_usage_mb,
+        "timestamp": time.time()
+    })
+
 
     return jsonify({"response": response})
 
@@ -130,7 +141,15 @@ def chat_embeddings_response():
     cpu_usage = process.cpu_percent(interval=0.1)
     memory_usage_mb = process.memory_info().rss / 1024 / 1024
 
-    print(f"📊 [Embeddings] Latencia: {latency:.4f} s | CPU: {cpu_usage:.2f}% | Memoria: {memory_usage_mb:.2f} MB")
+    # Guarda la métrica
+    metricas.append({
+        "modelo": "NLTK",
+        "latencia": latency,
+        "cpu": cpu_usage,
+        "memoria": memory_usage_mb,
+        "timestamp": time.time()
+    })
+
 
     return jsonify({"response": response})
 
@@ -147,7 +166,15 @@ def chat_transformers_response():
     cpu_usage = process.cpu_percent(interval=0.1)
     memory_usage_mb = process.memory_info().rss / 1024 / 1024
 
-    print(f"📊 [Transformers] Latencia: {latency:.4f} s | CPU: {cpu_usage:.2f}% | Memoria: {memory_usage_mb:.2f} MB")
+    # Guarda la métrica
+    metricas.append({
+        "modelo": "NLTK",
+        "latencia": latency,
+        "cpu": cpu_usage,
+        "memoria": memory_usage_mb,
+        "timestamp": time.time()
+    })
+
 
     return jsonify({"response": response})
 
@@ -191,7 +218,14 @@ def chat_openai_response():
         cpu_usage = process.cpu_percent(interval=0.1)
         memory_usage_mb = process.memory_info().rss / 1024 / 1024
 
-        print(f"📊 [OpenAI] Latencia: {latency:.4f} s | CPU: {cpu_usage:.2f}% | Memoria: {memory_usage_mb:.2f} MB")
+        # Guarda la métrica
+        metricas.append({
+            "modelo": "NLTK",
+            "latencia": latency,
+            "cpu": cpu_usage,
+            "memoria": memory_usage_mb,
+            "timestamp": time.time()
+        })
 
         return jsonify({"response": response})
 
