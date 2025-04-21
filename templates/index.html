@@ -100,7 +100,7 @@ function actualizarMetricas() {
             fetch("/api/metricas")
                 .then(response => response.json())
                 .then(data => {
-                    const ordenModelos = ["NLTK", "Embeddings", "Transformers", "OpenAI"];
+                    const ordenModelos = ["NLTK", "Embeddings", "OpenAI"];
                     data.sort((a, b) => ordenModelos.indexOf(a.modelo) - ordenModelos.indexOf(b.modelo));
 
                     const tbody = document.getElementById("metricas-body");
