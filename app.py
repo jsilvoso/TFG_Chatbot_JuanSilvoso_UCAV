@@ -143,7 +143,7 @@ def chat_embeddings_response():
 
     # Guarda la métrica
     metricas.append({
-        "modelo": "NLTK",
+        "modelo": "Embeddings",
         "latencia": latency,
         "cpu": cpu_usage,
         "memoria": memory_usage_mb,
@@ -168,7 +168,7 @@ def chat_transformers_response():
 
     # Guarda la métrica
     metricas.append({
-        "modelo": "NLTK",
+        "modelo": "Transformers",
         "latencia": latency,
         "cpu": cpu_usage,
         "memoria": memory_usage_mb,
@@ -220,7 +220,7 @@ def chat_openai_response():
 
         # Guarda la métrica
         metricas.append({
-            "modelo": "NLTK",
+            "modelo": "openai",
             "latencia": latency,
             "cpu": cpu_usage,
             "memoria": memory_usage_mb,
