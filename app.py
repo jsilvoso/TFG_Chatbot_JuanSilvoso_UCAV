@@ -12,11 +12,17 @@ import psutil
 from collections import deque
 import csv
 from flask import send_file
+from datetime import datetime
 
 load_dotenv()
 
 # Inicializa Flask
 app = Flask(__name__)
+
+#Filtro para que la hora sea legible
+@app.template_filter('timestamp_to_str')
+def timestamp_to_str(timestamp):
+    return datetime.fromtimestamp(timestamp).strftime("%H:%M:%S")
 
 # Configuración OpenAI
 api_key = os.getenv("OPENAI_API_KEY")
@@ -77,12 +83,12 @@ def guardar_metricas(nombre_modelo, inicio, fin):
     memory_usage_mb = round(process.memory_info().rss / 1024 / 1024, 2)
     timestamp = time.time()
 
-    metricas = {
+    metrica = {
         "modelo": nombre_modelo,
         "latencia": latency,
         "cpu": cpu_usage,
         "memoria": memory_usage_mb,
-        "timestamp": time.time()
+        "timestamp": timestamp
     }
 
     metricas.append(metrica)
