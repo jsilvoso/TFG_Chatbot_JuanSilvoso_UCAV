@@ -10,6 +10,8 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 import time
 import psutil
 from collections import deque
+import csv
+
 
 load_dotenv()
 
@@ -73,14 +75,27 @@ def guardar_metricas(nombre_modelo, inicio, fin):
     latency = round(fin - inicio, 4)
     cpu_usage = round(process.cpu_percent(interval=0.05), 2)
     memory_usage_mb = round(process.memory_info().rss / 1024 / 1024, 2)
+    timestamp = time.time()
 
-    metricas.append({
+    metricas = {
         "modelo": nombre_modelo,
         "latencia": latency,
         "cpu": cpu_usage,
         "memoria": memory_usage_mb,
         "timestamp": time.time()
-    })
+    }
+
+    metricas.append(metrica)
+
+    # Escribir en CSV
+    archivo = "metricas.csv"
+    archivo_nuevo = not os.path.exists(archivo)
+
+    with open(archivo, mode="a", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=["modelo", "latencia", "cpu", "memoria", "timestamp"])
+        if archivo_nuevo:
+            writer.writeheader()
+        writer.writerow(metrica)
 
 # Rutas Flask
 @app.route("/")
