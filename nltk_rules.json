@@ -1,0 +1,6 @@
+[
+  ["hola|buenas", ["¡Hola! ¿En qué puedo ayudarte?", "¡Hola!"]],
+  ["cómo estás", ["Estoy bien, gracias. ¿Y tú?", "Muy bien, ¿y tú?"]],
+  ["adiós|chao", ["¡Hasta luego!", "Adiós, que tengas un buen día."]],
+  ["qué.*hora", ["No tengo reloj, pero seguro que es buena hora para programar."]]
+]

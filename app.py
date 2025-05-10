@@ -1,6 +1,6 @@
-# Programa principal
+# Programa principal mejorado con reglas y respuestas externas
 
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_file
 from nltk.chat.util import Chat, reflections
 import spacy
 import os
@@ -11,18 +11,12 @@ import time
 import psutil
 from collections import deque
 import csv
-from flask import send_file
-from datetime import datetime
+import json
 
 load_dotenv()
 
 # Inicializa Flask
 app = Flask(__name__)
-
-#Filtro para que la hora sea legible
-@app.template_filter('timestamp_to_str')
-def timestamp_to_str(timestamp):
-    return datetime.fromtimestamp(timestamp).strftime("%H:%M:%S")
 
 # Configuración OpenAI
 api_key = os.getenv("OPENAI_API_KEY")
@@ -47,23 +41,22 @@ nlp = spacy.load("es_core_news_sm")
 process = psutil.Process(os.getpid())
 metricas = deque(maxlen=100)
 
-# Chatbot NLTK
-pares = [
-    (r"hola|buenas", ["\u00a1Hola! ¿En qué puedo ayudarte?", "\u00a1Hola!"]),
-    (r"cómo estás", ["Estoy bien, gracias. ¿Y tú?", "Muy bien, ¿y tú?"]),
-    (r"adiós|chao", ["\u00a1Hasta luego!", "Adiós, que tengas un buen día."])
-]
-chat_nltk = Chat(pares, reflections)
+# Cargar reglas NLTK desde JSON
+with open("nltk_rules.json", encoding="utf-8") as f:
+    nltk_pares = json.load(f)
+chat_nltk = Chat(nltk_pares, reflections)
+
+# Cargar respuestas para embeddings desde JSON
+with open("respuestas_spacy.json", encoding="utf-8") as f:
+    respuestas_spacy = json.load(f)
 
 def get_best_match(user_input):
-    responses = {
-        "hola": "\u00a1Hola! ¿En qué puedo ayudarte?",
-        "cómo estás": "Estoy bien, gracias por preguntar.",
-        "adiós": "\u00a1Hasta luego!"
-    }
     user_doc = nlp(user_input)
-    best_match = max(responses.keys(), key=lambda x: nlp(x).similarity(user_doc))
-    return responses[best_match] if user_doc.similarity(nlp(best_match)) > 0.5 else "No entendí tu pregunta."
+    best_match = max(respuestas_spacy.keys(), key=lambda x: nlp(x).similarity(user_doc))
+    if user_doc.similarity(nlp(best_match)) > 0.6:
+        return respuestas_spacy[best_match]
+    else:
+        return "No entendí tu pregunta."
 
 # Transformers
 model_name = "microsoft/DialoGPT-small"
@@ -77,6 +70,7 @@ def generate_transformer_response(user_input):
     return response if response else "No tengo una respuesta para eso."
 
 # Guardar métricas
+
 def guardar_metricas(nombre_modelo, inicio, fin):
     latency = round(fin - inicio, 4)
     cpu_usage = round(process.cpu_percent(interval=0.05), 2)
@@ -90,13 +84,11 @@ def guardar_metricas(nombre_modelo, inicio, fin):
         "memoria": memory_usage_mb,
         "timestamp": timestamp
     }
-
     metricas.append(metrica)
 
     # Escribir en CSV
     archivo = "metricas.csv"
     archivo_nuevo = not os.path.exists(archivo)
-
     with open(archivo, mode="a", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=["modelo", "latencia", "cpu", "memoria", "timestamp"])
         if archivo_nuevo:
@@ -192,12 +184,10 @@ def api_metricas():
 def descargar_metricas():
     archivo = "metricas.csv"
     if not os.path.exists(archivo):
-        # Si no existe, crea uno vacío con cabecera
         with open(archivo, mode="w", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(f, fieldnames=["modelo", "latencia", "cpu", "memoria", "timestamp"])
             writer.writeheader()
     return send_file(archivo, as_attachment=True)
-
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
