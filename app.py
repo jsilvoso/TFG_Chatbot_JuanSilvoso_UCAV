@@ -11,7 +11,7 @@ import time
 import psutil
 from collections import deque
 import csv
-
+from flask import send_file
 
 load_dotenv()
 
@@ -181,6 +181,16 @@ def api_metricas():
             })
 
     return jsonify(resultado)
+
+@app.route("/descargar_metricas")
+def descargar_metricas():
+    archivo = "metricas.csv"
+    if not os.path.exists(archivo):
+        # Si no existe, crea uno vacío con cabecera
+        with open(archivo, mode="w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=["modelo", "latencia", "cpu", "memoria", "timestamp"])
+            writer.writeheader()
+    return send_file(archivo, as_attachment=True)
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
