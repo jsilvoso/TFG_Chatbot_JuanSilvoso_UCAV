@@ -1,6 +1,12 @@
 {
   "hola": "¡Hola! ¿En qué puedo ayudarte?",
   "cómo estás": "Estoy bien, gracias por preguntar.",
-  "adiós": "¡Hasta luego!",
-  "qué hora es": "Lo siento, no tengo acceso a la hora actual."
+  "adiós": "¡Hasta luego, espero verte pronto!",
+  "qué hora es": "Lo siento, no tengo acceso a la hora actual.",
+  "qué día es hoy": "Lo siento, no tengo acceso al día actual.",
+  "gracias": "¡De nada!",
+  "qué puedes hacer": "Puedo responder preguntas simples y ayudarte a explorar distintos modelos de chatbot.",
+  "quién eres": "Soy un chatbot creado con spaCy y Python.",
+  "cuál es tu nombre": "Pues de momento no me pusieron nombre.",
+  "me puedes ayudar": "¡Por supuesto! Dime qué necesitas."
 }
