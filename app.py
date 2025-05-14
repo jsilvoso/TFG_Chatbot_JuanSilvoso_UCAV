@@ -64,7 +64,7 @@ def get_best_match(user_input):
             mejor_frase = frase
 
     # Umbral mínimo aceptable de similaridad
-    umbral = 0.65
+    umbral = 0.55
 
     if mejor_score >= umbral:
         return respuestas_spacy[mejor_frase]
