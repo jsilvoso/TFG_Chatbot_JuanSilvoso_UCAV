@@ -51,10 +51,23 @@ with open("respuestas_spacy.json", encoding="utf-8") as f:
     respuestas_spacy = json.load(f)
 
 def get_best_match(user_input):
-    user_doc = nlp(user_input)
-    best_match = max(respuestas_spacy.keys(), key=lambda x: nlp(x).similarity(user_doc))
-    if user_doc.similarity(nlp(best_match)) > 0.6:
-        return respuestas_spacy[best_match]
+    user_doc = nlp(user_input.lower())
+    mejor_score = 0
+    mejor_frase = None
+
+    for frase in respuestas_spacy.keys():
+        frase_doc = nlp(frase)
+        score = user_doc.similarity(frase_doc)
+        print(f"[Embeddings] Similaridad '{user_input}' ↔ '{frase}': {score:.4f}")
+        if score > mejor_score:
+            mejor_score = score
+            mejor_frase = frase
+
+    # Umbral mínimo aceptable de similaridad
+    umbral = 0.65
+
+    if mejor_score >= umbral:
+        return respuestas_spacy[mejor_frase]
     else:
         return "No entendí tu pregunta."
 
