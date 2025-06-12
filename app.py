@@ -99,8 +99,9 @@ def generate_transformer_response(user_input):
 # Guardar métricas
 
 def guardar_metricas(nombre_modelo, inicio, fin):
+
     latency = round(fin - inicio, 4)
-    cpu_usage = round(process.cpu_percent(interval=0.05), 2)
+    cpu_usage = round(process.cpu_percent(interval=0), 2)
     memory_usage_mb = round(process.memory_info().rss / 1024 / 1024, 2)
     timestamp = time.time()
 

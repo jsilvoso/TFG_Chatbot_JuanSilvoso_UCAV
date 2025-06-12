@@ -50,7 +50,7 @@
             fetchResponses("transformersChat", "/chat_transformers", input);
             -->
             fetchResponses("openaiChat", "/chat_openai", input); // Reemplacé Transformers por OpenAI
-            
+
             document.getElementById("userInput").value = "";
         }
 
@@ -92,33 +92,35 @@
 
 <script>
 function actualizarMetricas() {
-            fetch("/api/metricas")
-                .then(response => response.json())
-                .then(data => {
-                    const ordenModelos = ["NLTK", "Embeddings", "OpenAI"];
-                    data.sort((a, b) => ordenModelos.indexOf(a.modelo) - ordenModelos.indexOf(b.modelo));
+    fetch("/api/metricas")
+        .then(response => response.json())
+        .then(data => {
+            const ordenModelos = ["NLTK", "Embeddings", "OpenAI"];
+            const tbody = document.getElementById("metricas-body");
+            tbody.innerHTML = "";
 
-                    const tbody = document.getElementById("metricas-body");
-                    tbody.innerHTML = "";
+            ordenModelos.forEach(modelo => {
+                const m = data.find(item => item.modelo === modelo) || {
+                    modelo: modelo,
+                    latencia: null,
+                    cpu: null,
+                    memoria: null,
+                    timestamp: Date.now() / 1000
+                };
 
-                    data.forEach(m => {
-                        const row = document.createElement("tr");
-                        row.innerHTML = `
-                            <td>${m.modelo}</td>
-                            <td>${m.latencia !== null ? m.latencia.toFixed(4) : "-"}</td>
-                            <td>${m.cpu !== null ? m.cpu.toFixed(2) : "-"}</td>
-                            <td>${m.memoria !== null ? m.memoria.toFixed(2) : "-"}</td>
-                            <td>${new Date(m.timestamp * 1000).toLocaleTimeString()}</td>
-                        `;
-                        tbody.appendChild(row);
-                    });
-                });
-        }
-
-
-    //setInterval(actualizarMetricas, 2000); // Actualiza las metricas cada 2 segundos
-    </script>
-
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${m.modelo}</td>
+                    <td>${m.latencia !== null ? m.latencia.toFixed(4) : "-"}</td>
+                    <td>${m.cpu !== null ? m.cpu.toFixed(2) : "-"}</td>
+                    <td>${m.memoria !== null ? m.memoria.toFixed(2) : "-"}</td>
+                    <td>${new Date(m.timestamp * 1000).toLocaleTimeString()}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        });
+}
+</script>
     <h2> Esta página es para ver las
         diferentes respuestas de un chatbot depeniendo del tipo de
         metodo usado para generar las respuestas. </h2>
